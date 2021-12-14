@@ -136,6 +136,111 @@ export class CdkpipelinesDemoStack extends Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda16')),
     });
 
+    const handler17 = new lambda.Function(this, 'Lambda17', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler17.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda17')),
+    });
+    const handler18 = new lambda.Function(this, 'Lambda18', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler18.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda18')),
+    });
+    const handler19 = new lambda.Function(this, 'Lambda19', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler19.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda19')),
+    });
+    const handler20 = new lambda.Function(this, 'Lambda20', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler20.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda20')),
+    });
+    const handler21 = new lambda.Function(this, 'Lambda21', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler21.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda21')),
+    });
+    const handler22 = new lambda.Function(this, 'Lambda22', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler22.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda22')),
+    });
+    const handler23 = new lambda.Function(this, 'Lambda23', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler23.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda23')),
+    });
+    const handler24 = new lambda.Function(this, 'Lambda24', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler24.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda24')),
+    });
+    const handler25 = new lambda.Function(this, 'Lambda25', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler25.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda25')),
+    });
+    const handler26 = new lambda.Function(this, 'Lambda26', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler26.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda26')),
+    });
+    const handler27 = new lambda.Function(this, 'Lambda27', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler27.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda27')),
+    });
+    const handler28 = new lambda.Function(this, 'Lambda28', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler28.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda28')),
+    });
+    const handler29 = new lambda.Function(this, 'Lambda29', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler29.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda29')),
+    });
+    const handler30 = new lambda.Function(this, 'Lambda30', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler30.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda30')),
+    });
+    const handler31 = new lambda.Function(this, 'Lambda31', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler31.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda31')),
+    });
+    const handler32 = new lambda.Function(this, 'Lambda32', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler32.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda32')),
+    });
+    const handler33 = new lambda.Function(this, 'Lambda33', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler33.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda33')),
+    });
+    const handler34 = new lambda.Function(this, 'Lambda34', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler34.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda34')),
+    });
+    const handler35 = new lambda.Function(this, 'Lambda35', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler35.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda35')),
+    });
+    const handler36 = new lambda.Function(this, 'Lambda36', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler36.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda36')),
+    });
+//    const handler37 = new lambda.Function(this, 'Lambda37', {
+//      runtime: lambda.Runtime.NODEJS_12_X,
+//      handler: 'handler37.handler',
+//      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda37')),
+//    });
 
   }
 }
