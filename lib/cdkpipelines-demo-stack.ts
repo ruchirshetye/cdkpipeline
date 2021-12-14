@@ -2,6 +2,7 @@ import * as apigw from '@aws-cdk/aws-apigateway';
 import * as lambda from '@aws-cdk/aws-lambda';
 import { CfnOutput, Construct, Stack, StackProps } from '@aws-cdk/core';
 import * as path from 'path';
+import * as sqs from '@aws-cdk/aws-sqs';
 
 /**
  * A stack for our simple Lambda-powered web service
@@ -241,6 +242,210 @@ export class CdkpipelinesDemoStack extends Stack {
       handler: 'handler37.handler',
       code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda37')),
     });
+
+    const handler40 = new lambda.Function(this, 'Lambda40', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler40.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda40')),
+    });
+    const handler41 = new lambda.Function(this, 'Lambda41', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler41.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda41')),
+    });
+    const handler42 = new lambda.Function(this, 'Lambda42', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler42.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda42')),
+    });
+    const handler43 = new lambda.Function(this, 'Lambda43', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler43.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda43')),
+    });
+    const handler44 = new lambda.Function(this, 'Lambda44', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler44.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda44')),
+    });
+    const handler45 = new lambda.Function(this, 'Lambda45', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler45.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda45')),
+    });
+    const handler46 = new lambda.Function(this, 'Lambda46', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler46.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda46')),
+    });
+    const handler47 = new lambda.Function(this, 'Lambda47', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler47.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda47')),
+    });
+
+    const gw3 = new apigw.LambdaRestApi(this, 'Gateway3', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw3.url,
+    });
+
+    const gw4 = new apigw.LambdaRestApi(this, 'Gateway4', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw4.url,
+    });
+
+    const gw5 = new apigw.LambdaRestApi(this, 'Gateway5', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw5.url,
+    });
+
+    const gw6 = new apigw.LambdaRestApi(this, 'Gateway6', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw6.url,
+    });
+
+    const gw7 = new apigw.LambdaRestApi(this, 'Gateway7', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw7.url,
+    });
+
+    const gw8 = new apigw.LambdaRestApi(this, 'Gateway8', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw8.url,
+    });
+
+    const gw9 = new apigw.LambdaRestApi(this, 'Gateway9', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw9.url,
+    });
+
+    const gw10 = new apigw.LambdaRestApi(this, 'Gateway10', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw10.url,
+    });
+
+    const gw11 = new apigw.LambdaRestApi(this, 'Gateway11', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw11.url,
+    });
+
+    const gw12 = new apigw.LambdaRestApi(this, 'Gateway12', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw12.url,
+    });
+
+    const gw13 = new apigw.LambdaRestApi(this, 'Gateway13', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw13.url,
+    });
+
+    const gw14 = new apigw.LambdaRestApi(this, 'Gateway14', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw14.url,
+    });
+
+    const gw15 = new apigw.LambdaRestApi(this, 'Gateway15', {
+      description: 'Endpoint for a simple Lambda-powered web service',
+      handler,
+    });
+
+    this.urlOutput = new CfnOutput(this, 'Url', {
+      value: gw15.url,
+    });
+
+    new sqs.Queue(this, 'Queue', {
+  encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue2', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue3', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue4', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue5', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue6', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue7', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue8', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue9', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue10', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue11', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue12', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue13', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue14', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
+new sqs.Queue(this, 'Queue15', {
+encryption: sqs.QueueEncryption.KMS_MANAGED,
+});
 
   }
 }

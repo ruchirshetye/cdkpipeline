@@ -1,0 +1,3378 @@
+{
+  "Resources": {
+    "LambdaServiceRoleA8ED4D3B": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda/ServiceRole/Resource"
+      }
+    },
+    "LambdaD247545B": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "9d8138efdaa20be07d74a5b12e52d38b904b79595a17fb4bd96bdcf0b3037f60.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "LambdaServiceRoleA8ED4D3B",
+            "Arn"
+          ]
+        },
+        "Handler": "handler.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "LambdaServiceRoleA8ED4D3B"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda/Resource",
+        "aws:asset:path": "../asset.9d8138efdaa20be07d74a5b12e52d38b904b79595a17fb4bd96bdcf0b3037f60",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Gateway43CB3636": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Description": "Endpoint for a simple Lambda-powered web service",
+        "Name": "Gateway"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Resource"
+      }
+    },
+    "GatewayCloudWatchRole34305E06": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/CloudWatchRole/Resource"
+      }
+    },
+    "GatewayAccount6D7AA49C": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "GatewayCloudWatchRole34305E06",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "Gateway43CB3636"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Account"
+      }
+    },
+    "GatewayDeployment880EB8C2f9b9c73ee1db118866b0bccb23486557": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "Gateway43CB3636"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "GatewayproxyANYCE067C19",
+        "Gatewayproxy441946D2",
+        "GatewayANY8DB43F89"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Deployment/Resource"
+      }
+    },
+    "GatewayDeploymentStageprod62BC6904": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "Gateway43CB3636"
+        },
+        "DeploymentId": {
+          "Ref": "GatewayDeployment880EB8C2f9b9c73ee1db118866b0bccb23486557"
+        },
+        "StageName": "prod"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/DeploymentStage.prod/Resource"
+      }
+    },
+    "Gatewayproxy441946D2": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "Gateway43CB3636",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "Gateway43CB3636"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Default/{proxy+}/Resource"
+      }
+    },
+    "GatewayproxyANYApiPermissionCdkpipelinesDemoPipelineStackPreProdWebServiceGateway7150A68CANYproxy6C2215B3": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway43CB3636"
+              },
+              "/",
+              {
+                "Ref": "GatewayDeploymentStageprod62BC6904"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Default/{proxy+}/ANY/ApiPermission.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway7150A68C.ANY..{proxy+}"
+      }
+    },
+    "GatewayproxyANYApiPermissionTestCdkpipelinesDemoPipelineStackPreProdWebServiceGateway7150A68CANYproxyE0571601": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway43CB3636"
+              },
+              "/test-invoke-stage/*/*"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Default/{proxy+}/ANY/ApiPermission.Test.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway7150A68C.ANY..{proxy+}"
+      }
+    },
+    "GatewayproxyANYCE067C19": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Ref": "Gatewayproxy441946D2"
+        },
+        "RestApiId": {
+          "Ref": "Gateway43CB3636"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LambdaD247545B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Default/{proxy+}/ANY/Resource"
+      }
+    },
+    "GatewayANYApiPermissionCdkpipelinesDemoPipelineStackPreProdWebServiceGateway7150A68CANY6F3095C2": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway43CB3636"
+              },
+              "/",
+              {
+                "Ref": "GatewayDeploymentStageprod62BC6904"
+              },
+              "/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Default/ANY/ApiPermission.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway7150A68C.ANY.."
+      }
+    },
+    "GatewayANYApiPermissionTestCdkpipelinesDemoPipelineStackPreProdWebServiceGateway7150A68CANYD2832FD9": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway43CB3636"
+              },
+              "/test-invoke-stage/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Default/ANY/ApiPermission.Test.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway7150A68C.ANY.."
+      }
+    },
+    "GatewayANY8DB43F89": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "Gateway43CB3636",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "Gateway43CB3636"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LambdaD247545B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway/Default/ANY/Resource"
+      }
+    },
+    "Lambda2ServiceRole31A072E1": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda2/ServiceRole/Resource"
+      }
+    },
+    "Lambda217CFB423": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "de0a1521211676b8feaa695d7b612f2ebdb1c6351cc4d1ebee8e06493add2465.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda2ServiceRole31A072E1",
+            "Arn"
+          ]
+        },
+        "Handler": "handler2.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda2ServiceRole31A072E1"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda2/Resource",
+        "aws:asset:path": "../asset.de0a1521211676b8feaa695d7b612f2ebdb1c6351cc4d1ebee8e06493add2465",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda2",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Gateway22A5CCA4B": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Description": "Endpoint for a simple Lambda-powered web service",
+        "Name": "Gateway2"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Resource"
+      }
+    },
+    "Gateway2CloudWatchRoleA1E3D49E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/CloudWatchRole/Resource"
+      }
+    },
+    "Gateway2Account8F3D98B3": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "Gateway2CloudWatchRoleA1E3D49E",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "Gateway22A5CCA4B"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Account"
+      }
+    },
+    "Gateway2Deployment59C6D88636626236f2c4fd83ed7322fec90ca137": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "Gateway22A5CCA4B"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "Gateway2proxyANYB41281B3",
+        "Gateway2proxy3072F460",
+        "Gateway2ANY736B16EB"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Deployment/Resource"
+      }
+    },
+    "Gateway2DeploymentStageprod7BAB046A": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "Gateway22A5CCA4B"
+        },
+        "DeploymentId": {
+          "Ref": "Gateway2Deployment59C6D88636626236f2c4fd83ed7322fec90ca137"
+        },
+        "StageName": "prod"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/DeploymentStage.prod/Resource"
+      }
+    },
+    "Gateway2proxy3072F460": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "Gateway22A5CCA4B",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "Gateway22A5CCA4B"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Default/{proxy+}/Resource"
+      }
+    },
+    "Gateway2proxyANYApiPermissionCdkpipelinesDemoPipelineStackPreProdWebServiceGateway2D2594412ANYproxyE16EF661": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway22A5CCA4B"
+              },
+              "/",
+              {
+                "Ref": "Gateway2DeploymentStageprod7BAB046A"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Default/{proxy+}/ANY/ApiPermission.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway2D2594412.ANY..{proxy+}"
+      }
+    },
+    "Gateway2proxyANYApiPermissionTestCdkpipelinesDemoPipelineStackPreProdWebServiceGateway2D2594412ANYproxy4182387B": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway22A5CCA4B"
+              },
+              "/test-invoke-stage/*/*"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Default/{proxy+}/ANY/ApiPermission.Test.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway2D2594412.ANY..{proxy+}"
+      }
+    },
+    "Gateway2proxyANYB41281B3": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Ref": "Gateway2proxy3072F460"
+        },
+        "RestApiId": {
+          "Ref": "Gateway22A5CCA4B"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LambdaD247545B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Default/{proxy+}/ANY/Resource"
+      }
+    },
+    "Gateway2ANYApiPermissionCdkpipelinesDemoPipelineStackPreProdWebServiceGateway2D2594412ANY0DA34BCD": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway22A5CCA4B"
+              },
+              "/",
+              {
+                "Ref": "Gateway2DeploymentStageprod7BAB046A"
+              },
+              "/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Default/ANY/ApiPermission.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway2D2594412.ANY.."
+      }
+    },
+    "Gateway2ANYApiPermissionTestCdkpipelinesDemoPipelineStackPreProdWebServiceGateway2D2594412ANY611194AB": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway22A5CCA4B"
+              },
+              "/test-invoke-stage/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Default/ANY/ApiPermission.Test.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway2D2594412.ANY.."
+      }
+    },
+    "Gateway2ANY736B16EB": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "Gateway22A5CCA4B",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "Gateway22A5CCA4B"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LambdaD247545B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway2/Default/ANY/Resource"
+      }
+    },
+    "Lambda3ServiceRole54BB0786": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda3/ServiceRole/Resource"
+      }
+    },
+    "Lambda35298F1AD": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "79976398e85fd842e009ef29be8d5d1cd4d97de6d05dbd66a027b752d3946402.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda3ServiceRole54BB0786",
+            "Arn"
+          ]
+        },
+        "Handler": "handler3.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda3ServiceRole54BB0786"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda3/Resource",
+        "aws:asset:path": "../asset.79976398e85fd842e009ef29be8d5d1cd4d97de6d05dbd66a027b752d3946402",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda3",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Gateway340CD0A10": {
+      "Type": "AWS::ApiGateway::RestApi",
+      "Properties": {
+        "Description": "Endpoint for a simple Lambda-powered web service",
+        "Name": "Gateway3"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Resource"
+      }
+    },
+    "Gateway3CloudWatchRole4A639198": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "apigateway.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/CloudWatchRole/Resource"
+      }
+    },
+    "Gateway3Account3AF892ED": {
+      "Type": "AWS::ApiGateway::Account",
+      "Properties": {
+        "CloudWatchRoleArn": {
+          "Fn::GetAtt": [
+            "Gateway3CloudWatchRole4A639198",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "Gateway340CD0A10"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Account"
+      }
+    },
+    "Gateway3Deployment6F33E5F55b7f3a297de3ef29c99d0151a79a014c": {
+      "Type": "AWS::ApiGateway::Deployment",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "Gateway340CD0A10"
+        },
+        "Description": "Automatically created by the RestApi construct"
+      },
+      "DependsOn": [
+        "Gateway3proxyANY7743DCEE",
+        "Gateway3proxy33767EEF",
+        "Gateway3ANY9BA40044"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Deployment/Resource"
+      }
+    },
+    "Gateway3DeploymentStageprodF9A36885": {
+      "Type": "AWS::ApiGateway::Stage",
+      "Properties": {
+        "RestApiId": {
+          "Ref": "Gateway340CD0A10"
+        },
+        "DeploymentId": {
+          "Ref": "Gateway3Deployment6F33E5F55b7f3a297de3ef29c99d0151a79a014c"
+        },
+        "StageName": "prod"
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/DeploymentStage.prod/Resource"
+      }
+    },
+    "Gateway3proxy33767EEF": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "Gateway340CD0A10",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "Gateway340CD0A10"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Default/{proxy+}/Resource"
+      }
+    },
+    "Gateway3proxyANYApiPermissionCdkpipelinesDemoPipelineStackPreProdWebServiceGateway3261D442FANYproxyB7D2083A": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway340CD0A10"
+              },
+              "/",
+              {
+                "Ref": "Gateway3DeploymentStageprodF9A36885"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Default/{proxy+}/ANY/ApiPermission.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway3261D442F.ANY..{proxy+}"
+      }
+    },
+    "Gateway3proxyANYApiPermissionTestCdkpipelinesDemoPipelineStackPreProdWebServiceGateway3261D442FANYproxyDA9D6360": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway340CD0A10"
+              },
+              "/test-invoke-stage/*/*"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Default/{proxy+}/ANY/ApiPermission.Test.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway3261D442F.ANY..{proxy+}"
+      }
+    },
+    "Gateway3proxyANY7743DCEE": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Ref": "Gateway3proxy33767EEF"
+        },
+        "RestApiId": {
+          "Ref": "Gateway340CD0A10"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LambdaD247545B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Default/{proxy+}/ANY/Resource"
+      }
+    },
+    "Gateway3ANYApiPermissionCdkpipelinesDemoPipelineStackPreProdWebServiceGateway3261D442FANY1E899BDE": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway340CD0A10"
+              },
+              "/",
+              {
+                "Ref": "Gateway3DeploymentStageprodF9A36885"
+              },
+              "/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Default/ANY/ApiPermission.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway3261D442F.ANY.."
+      }
+    },
+    "Gateway3ANYApiPermissionTestCdkpipelinesDemoPipelineStackPreProdWebServiceGateway3261D442FANY550F1964": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LambdaD247545B",
+            "Arn"
+          ]
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:us-west-2:997785413584:",
+              {
+                "Ref": "Gateway340CD0A10"
+              },
+              "/test-invoke-stage/*/"
+            ]
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Default/ANY/ApiPermission.Test.CdkpipelinesDemoPipelineStackPreProdWebServiceGateway3261D442F.ANY.."
+      }
+    },
+    "Gateway3ANY9BA40044": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "ANY",
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "Gateway340CD0A10",
+            "RootResourceId"
+          ]
+        },
+        "RestApiId": {
+          "Ref": "Gateway340CD0A10"
+        },
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:us-west-2:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LambdaD247545B",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Gateway3/Default/ANY/Resource"
+      }
+    },
+    "Lambda4ServiceRole72B40363": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda4/ServiceRole/Resource"
+      }
+    },
+    "Lambda461E84558": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "d01f39b56c3dd6f5203e48447d7ee6eb2f80d9f294ffa79b9a865ba597880dea.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda4ServiceRole72B40363",
+            "Arn"
+          ]
+        },
+        "Handler": "handler4.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda4ServiceRole72B40363"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda4/Resource",
+        "aws:asset:path": "../asset.d01f39b56c3dd6f5203e48447d7ee6eb2f80d9f294ffa79b9a865ba597880dea",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda4",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda5ServiceRole975EAA0D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda5/ServiceRole/Resource"
+      }
+    },
+    "Lambda578CFFC46": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "6275978f2cf3541a5b5c256267dbacfe46e7af3b75f7624c54a383b6758316ee.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda5ServiceRole975EAA0D",
+            "Arn"
+          ]
+        },
+        "Handler": "handler5.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda5ServiceRole975EAA0D"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda5/Resource",
+        "aws:asset:path": "../asset.6275978f2cf3541a5b5c256267dbacfe46e7af3b75f7624c54a383b6758316ee",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda5",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda6ServiceRole60951C02": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda6/ServiceRole/Resource"
+      }
+    },
+    "Lambda67FB0AC66": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "6067250227ccdd30ffc17487f142170fb364e1128dca88b5eb9ac8d3c98c7a93.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda6ServiceRole60951C02",
+            "Arn"
+          ]
+        },
+        "Handler": "handler6.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda6ServiceRole60951C02"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda6/Resource",
+        "aws:asset:path": "../asset.6067250227ccdd30ffc17487f142170fb364e1128dca88b5eb9ac8d3c98c7a93",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda6",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda7ServiceRole6C9B292C": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda7/ServiceRole/Resource"
+      }
+    },
+    "Lambda768EFE423": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "7c8c74880d7282bb08303f6e36df35a36c7ab9f9b64af63d486abb3c218ebcda.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda7ServiceRole6C9B292C",
+            "Arn"
+          ]
+        },
+        "Handler": "handler7.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda7ServiceRole6C9B292C"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda7/Resource",
+        "aws:asset:path": "../asset.7c8c74880d7282bb08303f6e36df35a36c7ab9f9b64af63d486abb3c218ebcda",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda7",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda8ServiceRole66230384": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda8/ServiceRole/Resource"
+      }
+    },
+    "Lambda8800FE484": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "6a1df3b956ecbdba4f5c0e01440bbddeafd8e8a5814a076f60381ce57ffb79e2.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda8ServiceRole66230384",
+            "Arn"
+          ]
+        },
+        "Handler": "handler8.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda8ServiceRole66230384"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda8/Resource",
+        "aws:asset:path": "../asset.6a1df3b956ecbdba4f5c0e01440bbddeafd8e8a5814a076f60381ce57ffb79e2",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda8",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda9ServiceRole5DFFDF6A": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda9/ServiceRole/Resource"
+      }
+    },
+    "Lambda98B0508B4": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "89b922bd57cca04cee0e356510d5e4b4bffc0bc691920a1440507e203d413575.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda9ServiceRole5DFFDF6A",
+            "Arn"
+          ]
+        },
+        "Handler": "handler9.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda9ServiceRole5DFFDF6A"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda9/Resource",
+        "aws:asset:path": "../asset.89b922bd57cca04cee0e356510d5e4b4bffc0bc691920a1440507e203d413575",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda9",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda10ServiceRole237A3FD3": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda10/ServiceRole/Resource"
+      }
+    },
+    "Lambda10E19C9CB0": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "fd798a894157039e319f034b1e54cb976f00578fd329fbe42706f55f1d2a8f3a.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda10ServiceRole237A3FD3",
+            "Arn"
+          ]
+        },
+        "Handler": "handler10.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda10ServiceRole237A3FD3"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda10/Resource",
+        "aws:asset:path": "../asset.fd798a894157039e319f034b1e54cb976f00578fd329fbe42706f55f1d2a8f3a",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda10",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda11ServiceRole4943A675": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda11/ServiceRole/Resource"
+      }
+    },
+    "Lambda11B0CC6B20": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "f065aae323d4b9745c32440a3b1af3a30ea6183028e09711ebf0d4f1d851bbc6.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda11ServiceRole4943A675",
+            "Arn"
+          ]
+        },
+        "Handler": "handler11.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda11ServiceRole4943A675"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda11/Resource",
+        "aws:asset:path": "../asset.f065aae323d4b9745c32440a3b1af3a30ea6183028e09711ebf0d4f1d851bbc6",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda11",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda12ServiceRole1546CF0F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda12/ServiceRole/Resource"
+      }
+    },
+    "Lambda1284FE6356": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "651994e2250bc7d7e30c9c799324508d1103997456983d756715b4ff34634765.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda12ServiceRole1546CF0F",
+            "Arn"
+          ]
+        },
+        "Handler": "handler12.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda12ServiceRole1546CF0F"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda12/Resource",
+        "aws:asset:path": "../asset.651994e2250bc7d7e30c9c799324508d1103997456983d756715b4ff34634765",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda12",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda13ServiceRole919AC0E5": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda13/ServiceRole/Resource"
+      }
+    },
+    "Lambda137D4D8C25": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "f2a164642eb4e4b2d389c49ab73aa7a48ee7494609a90cd2e94ce353da298568.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda13ServiceRole919AC0E5",
+            "Arn"
+          ]
+        },
+        "Handler": "handler13.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda13ServiceRole919AC0E5"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda13/Resource",
+        "aws:asset:path": "../asset.f2a164642eb4e4b2d389c49ab73aa7a48ee7494609a90cd2e94ce353da298568",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda13",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda14ServiceRole70F4BBD1": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda14/ServiceRole/Resource"
+      }
+    },
+    "Lambda14520D4B42": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "cbd0493adb271ff6dacabfb145e225eaf29beb0529763bc3a44927c19bde857e.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda14ServiceRole70F4BBD1",
+            "Arn"
+          ]
+        },
+        "Handler": "handler14.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda14ServiceRole70F4BBD1"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda14/Resource",
+        "aws:asset:path": "../asset.cbd0493adb271ff6dacabfb145e225eaf29beb0529763bc3a44927c19bde857e",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda14",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda15ServiceRole698F91A4": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda15/ServiceRole/Resource"
+      }
+    },
+    "Lambda1597407BAF": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "213be5280e016bd2a972d57be7a8f50a36c09be16782885a2946ab298e543f06.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda15ServiceRole698F91A4",
+            "Arn"
+          ]
+        },
+        "Handler": "handler15.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda15ServiceRole698F91A4"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda15/Resource",
+        "aws:asset:path": "../asset.213be5280e016bd2a972d57be7a8f50a36c09be16782885a2946ab298e543f06",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda15",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda16ServiceRole57DF8603": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda16/ServiceRole/Resource"
+      }
+    },
+    "Lambda16333ECD54": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "368c071de019b9756228b3f1061c79aa59450c4883d68f39a4b46a0c4151844d.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda16ServiceRole57DF8603",
+            "Arn"
+          ]
+        },
+        "Handler": "handler16.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda16ServiceRole57DF8603"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda16/Resource",
+        "aws:asset:path": "../asset.368c071de019b9756228b3f1061c79aa59450c4883d68f39a4b46a0c4151844d",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda16",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda17ServiceRoleD4125BD0": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda17/ServiceRole/Resource"
+      }
+    },
+    "Lambda17E6B83E39": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "21c730b9c522a4be25b20041ccebf5033cf9dc8a451ad47210a25d637cfc0004.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda17ServiceRoleD4125BD0",
+            "Arn"
+          ]
+        },
+        "Handler": "handler17.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda17ServiceRoleD4125BD0"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda17/Resource",
+        "aws:asset:path": "../asset.21c730b9c522a4be25b20041ccebf5033cf9dc8a451ad47210a25d637cfc0004",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda17",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda18ServiceRole53DC5ADD": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda18/ServiceRole/Resource"
+      }
+    },
+    "Lambda18495FC0F1": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "1a006f1529ca3244c98e6ad88fc534d86a45d163f25ed66aa93c1adeb41e9212.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda18ServiceRole53DC5ADD",
+            "Arn"
+          ]
+        },
+        "Handler": "handler18.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda18ServiceRole53DC5ADD"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda18/Resource",
+        "aws:asset:path": "../asset.1a006f1529ca3244c98e6ad88fc534d86a45d163f25ed66aa93c1adeb41e9212",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda18",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda19ServiceRoleB3356DE7": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda19/ServiceRole/Resource"
+      }
+    },
+    "Lambda19E846BEDA": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "83b1e45d4348746069b5975d43da9fbc1cd213426fb939796b97ec0e41011dd7.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda19ServiceRoleB3356DE7",
+            "Arn"
+          ]
+        },
+        "Handler": "handler19.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda19ServiceRoleB3356DE7"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda19/Resource",
+        "aws:asset:path": "../asset.83b1e45d4348746069b5975d43da9fbc1cd213426fb939796b97ec0e41011dd7",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda19",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda20ServiceRole432D63AC": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda20/ServiceRole/Resource"
+      }
+    },
+    "Lambda2032EACF9C": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "b1d85a5b5277e7731bda5399e4716a141f10d23ff08ca053f70d295127a66a68.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda20ServiceRole432D63AC",
+            "Arn"
+          ]
+        },
+        "Handler": "handler20.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda20ServiceRole432D63AC"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda20/Resource",
+        "aws:asset:path": "../asset.b1d85a5b5277e7731bda5399e4716a141f10d23ff08ca053f70d295127a66a68",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda20",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda21ServiceRoleE0AB9A3F": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda21/ServiceRole/Resource"
+      }
+    },
+    "Lambda21030F568F": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "d10430dc70cd629c37774ba573cc0218e78aa6586dd40e8c1d6c47acdcbe6082.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda21ServiceRoleE0AB9A3F",
+            "Arn"
+          ]
+        },
+        "Handler": "handler21.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda21ServiceRoleE0AB9A3F"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda21/Resource",
+        "aws:asset:path": "../asset.d10430dc70cd629c37774ba573cc0218e78aa6586dd40e8c1d6c47acdcbe6082",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda21",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda22ServiceRoleCE784C82": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda22/ServiceRole/Resource"
+      }
+    },
+    "Lambda22DE1C3FB7": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "19e65daec5a733d0791a5302aedda209ab69cd7048f635756e97005116ad3609.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda22ServiceRoleCE784C82",
+            "Arn"
+          ]
+        },
+        "Handler": "handler22.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda22ServiceRoleCE784C82"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda22/Resource",
+        "aws:asset:path": "../asset.19e65daec5a733d0791a5302aedda209ab69cd7048f635756e97005116ad3609",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda22",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda23ServiceRoleDC1EB39D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda23/ServiceRole/Resource"
+      }
+    },
+    "Lambda237F983E1F": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "f191d5af726953705fa9602df61cb5c5fe02fecb462bf54eb7f340dce5c16230.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda23ServiceRoleDC1EB39D",
+            "Arn"
+          ]
+        },
+        "Handler": "handler23.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda23ServiceRoleDC1EB39D"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda23/Resource",
+        "aws:asset:path": "../asset.f191d5af726953705fa9602df61cb5c5fe02fecb462bf54eb7f340dce5c16230",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda23",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda24ServiceRoleFC060240": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda24/ServiceRole/Resource"
+      }
+    },
+    "Lambda24E86333D8": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "1d59283e7d89822dcaf59d6b3b8251013c9f76e3627f27a946e57e515aab713c.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda24ServiceRoleFC060240",
+            "Arn"
+          ]
+        },
+        "Handler": "handler24.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda24ServiceRoleFC060240"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda24/Resource",
+        "aws:asset:path": "../asset.1d59283e7d89822dcaf59d6b3b8251013c9f76e3627f27a946e57e515aab713c",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda24",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda25ServiceRoleABA635D2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda25/ServiceRole/Resource"
+      }
+    },
+    "Lambda25F52C2672": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "e0b88af92bd7e0ec734f4e4e6d43464a216bb5d9da17489004c2e36e9b95c546.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda25ServiceRoleABA635D2",
+            "Arn"
+          ]
+        },
+        "Handler": "handler25.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda25ServiceRoleABA635D2"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda25/Resource",
+        "aws:asset:path": "../asset.e0b88af92bd7e0ec734f4e4e6d43464a216bb5d9da17489004c2e36e9b95c546",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda25",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda26ServiceRoleF99E297A": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda26/ServiceRole/Resource"
+      }
+    },
+    "Lambda2672B7BBEA": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "b47d2d81736615ad2bc021908572b202a40475eaebb7d91b060694a9f816853a.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda26ServiceRoleF99E297A",
+            "Arn"
+          ]
+        },
+        "Handler": "handler26.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda26ServiceRoleF99E297A"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda26/Resource",
+        "aws:asset:path": "../asset.b47d2d81736615ad2bc021908572b202a40475eaebb7d91b060694a9f816853a",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda26",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda27ServiceRole6F8B2E5D": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda27/ServiceRole/Resource"
+      }
+    },
+    "Lambda2705DE5BA5": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "98031197b919866647f0745a5c7616bfdd77f1f013f5c48ebed682cb11b0ccfe.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda27ServiceRole6F8B2E5D",
+            "Arn"
+          ]
+        },
+        "Handler": "handler27.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda27ServiceRole6F8B2E5D"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda27/Resource",
+        "aws:asset:path": "../asset.98031197b919866647f0745a5c7616bfdd77f1f013f5c48ebed682cb11b0ccfe",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda27",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda28ServiceRole13841C96": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda28/ServiceRole/Resource"
+      }
+    },
+    "Lambda28392B54E5": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "a45a2c7591ea9ee402b7f6c07ba56608945ca6b0b8b7b7e894ac1582e8c7a3db.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda28ServiceRole13841C96",
+            "Arn"
+          ]
+        },
+        "Handler": "handler28.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda28ServiceRole13841C96"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda28/Resource",
+        "aws:asset:path": "../asset.a45a2c7591ea9ee402b7f6c07ba56608945ca6b0b8b7b7e894ac1582e8c7a3db",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda28",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda29ServiceRoleD35F0165": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda29/ServiceRole/Resource"
+      }
+    },
+    "Lambda29754C367C": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "b0477c325f14f8a4b807a8e92c4435b733694968a38f7651699d167eb7f429c0.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda29ServiceRoleD35F0165",
+            "Arn"
+          ]
+        },
+        "Handler": "handler29.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda29ServiceRoleD35F0165"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda29/Resource",
+        "aws:asset:path": "../asset.b0477c325f14f8a4b807a8e92c4435b733694968a38f7651699d167eb7f429c0",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda29",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda30ServiceRole43695D90": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda30/ServiceRole/Resource"
+      }
+    },
+    "Lambda3074D3C7EB": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "f89408b00a197387f4f4e8fa382c3e3ca2954eb3eaef6be584cacdd2667135f1.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda30ServiceRole43695D90",
+            "Arn"
+          ]
+        },
+        "Handler": "handler30.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda30ServiceRole43695D90"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda30/Resource",
+        "aws:asset:path": "../asset.f89408b00a197387f4f4e8fa382c3e3ca2954eb3eaef6be584cacdd2667135f1",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda30",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda31ServiceRoleB3467585": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda31/ServiceRole/Resource"
+      }
+    },
+    "Lambda3132CB4907": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "84ce22f68111d9f8579115e882a0ef353f422b7077ee5edbf3f1519dd75a79a4.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda31ServiceRoleB3467585",
+            "Arn"
+          ]
+        },
+        "Handler": "handler31.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda31ServiceRoleB3467585"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda31/Resource",
+        "aws:asset:path": "../asset.84ce22f68111d9f8579115e882a0ef353f422b7077ee5edbf3f1519dd75a79a4",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda31",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda32ServiceRoleC72296D1": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda32/ServiceRole/Resource"
+      }
+    },
+    "Lambda32B008B9E3": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "4653e902ac72ff45a367b4e3c4530e2e68789a07186f1631acfee3a7135ae261.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda32ServiceRoleC72296D1",
+            "Arn"
+          ]
+        },
+        "Handler": "handler32.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda32ServiceRoleC72296D1"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda32/Resource",
+        "aws:asset:path": "../asset.4653e902ac72ff45a367b4e3c4530e2e68789a07186f1631acfee3a7135ae261",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda32",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda33ServiceRoleB5B51765": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda33/ServiceRole/Resource"
+      }
+    },
+    "Lambda33A40F8006": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "b165f5a6253a71a142bbcde252cdeaacfd4d98c7c2540b332179df8c17186c30.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda33ServiceRoleB5B51765",
+            "Arn"
+          ]
+        },
+        "Handler": "handler33.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda33ServiceRoleB5B51765"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda33/Resource",
+        "aws:asset:path": "../asset.b165f5a6253a71a142bbcde252cdeaacfd4d98c7c2540b332179df8c17186c30",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda33",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda34ServiceRoleC8056E89": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda34/ServiceRole/Resource"
+      }
+    },
+    "Lambda34EC693150": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "4511fb87ce2d45d1f50db6a7337ae8ce1b58f394a9dedfe383ba54dc53e69378.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda34ServiceRoleC8056E89",
+            "Arn"
+          ]
+        },
+        "Handler": "handler34.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda34ServiceRoleC8056E89"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda34/Resource",
+        "aws:asset:path": "../asset.4511fb87ce2d45d1f50db6a7337ae8ce1b58f394a9dedfe383ba54dc53e69378",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda34",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda35ServiceRole47EF977E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda35/ServiceRole/Resource"
+      }
+    },
+    "Lambda35B4D14FA3": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "a51078d26cb39ee14de2f870d707e04e9e960e12cf39d2a160abd7d252c46d2e.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda35ServiceRole47EF977E",
+            "Arn"
+          ]
+        },
+        "Handler": "handler35.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda35ServiceRole47EF977E"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda35/Resource",
+        "aws:asset:path": "../asset.a51078d26cb39ee14de2f870d707e04e9e960e12cf39d2a160abd7d252c46d2e",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda35",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda36ServiceRole2756A188": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda36/ServiceRole/Resource"
+      }
+    },
+    "Lambda36E3667FC8": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "4add9f897dd5954c4ef05a2cdfb50061e42d186029ef5d0888c23afcdeaec64c.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda36ServiceRole2756A188",
+            "Arn"
+          ]
+        },
+        "Handler": "handler36.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda36ServiceRole2756A188"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda36/Resource",
+        "aws:asset:path": "../asset.4add9f897dd5954c4ef05a2cdfb50061e42d186029ef5d0888c23afcdeaec64c",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda36",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "Lambda37ServiceRole0ADD4D26": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda37/ServiceRole/Resource"
+      }
+    },
+    "Lambda373DA20C86": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-997785413584-us-west-2",
+          "S3Key": "22df564334ef599430348a5154c93a43b75d4bb2c73d36a6a0689445b299ab2d.zip"
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "Lambda37ServiceRole0ADD4D26",
+            "Arn"
+          ]
+        },
+        "Handler": "handler37.handler",
+        "Runtime": "nodejs12.x"
+      },
+      "DependsOn": [
+        "Lambda37ServiceRole0ADD4D26"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/Lambda37/Resource",
+        "aws:asset:path": "../asset.22df564334ef599430348a5154c93a43b75d4bb2c73d36a6a0689445b299ab2d",
+        "aws:asset:original-path": "/codebuild/output/src659262398/src/lib/lambda37",
+        "aws:asset:is-bundled": false,
+        "aws:asset:property": "Code"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/02PwU7DMAyGn2X31KNsEle6TZxATOUJQmpK1japYodRRXl30pRKPfn7LcufXUJ5OMLD7lneqVBNtw/KOoTwwVJ1oiJCTthq04qzNcTOKxbnL/PuefSZaiTrncIo5hWhl8NnIyG8eKNYWzOPbPmKbtBEKUWh5QChtj3mPalGQYdCzlKC7E4ZTl51yCdJKOSoW8l4lxOE1yxKdq5G/X/IipVS1hsWFxx7Ow1o8qWbNP+UrQusP2TJ1dnfae1sPxRvyN+2mVsLxRiFsQ3CjfY/5RHKJ3jc3UjrwiW7HhDqpf4BQDyZOWYBAAA="
+      },
+      "Metadata": {
+        "aws:cdk:path": "CdkpipelinesDemoPipelineStack/PreProd/WebService/CDKMetadata/Default"
+      }
+    }
+  },
+  "Outputs": {
+    "GatewayEndpoint4DF49EE0": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "Gateway43CB3636"
+            },
+            ".execute-api.us-west-2.",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "GatewayDeploymentStageprod62BC6904"
+            },
+            "/"
+          ]
+        ]
+      }
+    },
+    "Url": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "Gateway43CB3636"
+            },
+            ".execute-api.us-west-2.",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "GatewayDeploymentStageprod62BC6904"
+            },
+            "/"
+          ]
+        ]
+      }
+    },
+    "Gateway2Endpoint774E5F86": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "Gateway22A5CCA4B"
+            },
+            ".execute-api.us-west-2.",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "Gateway2DeploymentStageprod7BAB046A"
+            },
+            "/"
+          ]
+        ]
+      }
+    },
+    "Gateway3Endpoint1111EABB": {
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "https://",
+            {
+              "Ref": "Gateway340CD0A10"
+            },
+            ".execute-api.us-west-2.",
+            {
+              "Ref": "AWS::URLSuffix"
+            },
+            "/",
+            {
+              "Ref": "Gateway3DeploymentStageprodF9A36885"
+            },
+            "/"
+          ]
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Type": "AWS::SSM::Parameter::Value<String>",
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+    }
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                  ],
+                  {
+                    "Ref": "BootstrapVersion"
+                  }
+                ]
+              }
+            ]
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+        }
+      ]
+    }
+  }
+}
