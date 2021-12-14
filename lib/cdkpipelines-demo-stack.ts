@@ -35,7 +35,7 @@ export class CdkpipelinesDemoStack extends Stack {
     // The Lambda function that contains the functionality
     const handler2 = new lambda.Function(this, 'Lambda2', {
       runtime: lambda.Runtime.NODEJS_12_X,
-      handler: 'handler.handler',
+      handler: 'handler2.handler',
       code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda2')),
     });
 
@@ -48,7 +48,7 @@ export class CdkpipelinesDemoStack extends Stack {
     // The Lambda function that contains the functionality
     const handler3 = new lambda.Function(this, 'Lambda3', {
       runtime: lambda.Runtime.NODEJS_12_X,
-      handler: 'handler.handler',
+      handler: 'handler3.handler',
       code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda3')),
     });
 
