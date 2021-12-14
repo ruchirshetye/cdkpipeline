@@ -236,11 +236,11 @@ export class CdkpipelinesDemoStack extends Stack {
       handler: 'handler36.handler',
       code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda36')),
     });
-//    const handler37 = new lambda.Function(this, 'Lambda37', {
-//      runtime: lambda.Runtime.NODEJS_12_X,
-//      handler: 'handler37.handler',
-//      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda37')),
-//    });
+    const handler37 = new lambda.Function(this, 'Lambda37', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      handler: 'handler37.handler',
+      code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda37')),
+    });
 
   }
 }
