@@ -22,7 +22,7 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
       sourceAction: new codepipeline_actions.GitHubSourceAction({
         actionName: 'GitHub',
         output: sourceArtifact,
-        oauthToken: SecretValue.secretsManager('github-token', { jsonField : 'github-token' }),
+        oauthToken: SecretValue.secretsManager('my-oauth'),
         owner: 'ruchirshetye',
         repo: 'cdkpipeline',
         branch: 'main'
@@ -40,7 +40,7 @@ export class CdkpipelinesDemoPipelineStack extends Stack {
 
     // This is where we add the application stages
     pipeline.addApplicationStage(new CdkpipelinesDemoStage(this, 'PreProd', {
-      env: { account: '997785413584', region: 'us-east-1' }
+      env: { account: '997785413584', region: 'us-west-2' }
     }));
   }
 }
