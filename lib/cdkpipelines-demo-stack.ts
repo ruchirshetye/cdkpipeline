@@ -284,13 +284,13 @@ export class CdkpipelinesDemoStack extends Stack {
       code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda47')),
     });
 
-    const gw3 = new apigw.LambdaRestApi(this, 'Gateway3', {
+    const gw16 = new apigw.LambdaRestApi(this, 'Gateway16', {
       description: 'Endpoint for a simple Lambda-powered web service',
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
-      value: gw3.url,
+    this.urlOutput = new CfnOutput(this, 'Url3', {
+      value: gw16.url,
     });
 
     const gw4 = new apigw.LambdaRestApi(this, 'Gateway4', {
@@ -298,7 +298,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url4', {
       value: gw4.url,
     });
 
@@ -307,7 +307,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url5', {
       value: gw5.url,
     });
 
@@ -316,7 +316,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url6', {
       value: gw6.url,
     });
 
@@ -325,7 +325,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url7', {
       value: gw7.url,
     });
 
@@ -334,7 +334,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url8', {
       value: gw8.url,
     });
 
@@ -343,7 +343,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url9', {
       value: gw9.url,
     });
 
@@ -352,7 +352,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url10', {
       value: gw10.url,
     });
 
@@ -361,7 +361,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url11', {
       value: gw11.url,
     });
 
@@ -370,7 +370,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url12', {
       value: gw12.url,
     });
 
@@ -379,7 +379,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url13', {
       value: gw13.url,
     });
 
@@ -388,7 +388,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url14', {
       value: gw14.url,
     });
 
@@ -397,7 +397,7 @@ export class CdkpipelinesDemoStack extends Stack {
       handler,
     });
 
-    this.urlOutput = new CfnOutput(this, 'Url', {
+    this.urlOutput = new CfnOutput(this, 'Url15', {
       value: gw15.url,
     });
 
